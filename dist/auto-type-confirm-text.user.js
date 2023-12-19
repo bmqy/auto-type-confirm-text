@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         auto-type-confirm-text
-// @namespace    bmqy.net
+// @name         自动输入二次确认文本
+// @namespace    npm/vite-plugin-monkey
 // @version      1.0.0
 // @author       monkey
 // @description  自动输入需要二次确认的文本
