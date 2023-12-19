@@ -7,8 +7,9 @@ export default defineConfig({
     monkey({
       entry: 'src/main.js',
       userscript: {
+        name: '自动输入二次确认文本',
         icon: 'https://vitejs.dev/logo.svg',
-        namespace: 'bmqy.net',
+        namespace: 'npm/vite-plugin-monkey',
         match: ['https://github.com/bmqy/*/settings', 'https://gitee.com/bmqy/*/settings*', 'https://codeup.aliyun.com/*/settings*'],
       },
     }),
