@@ -59,6 +59,21 @@ const app = {
                         }
                     }
                 }
+                // vercel.com
+                if(that.host === 'vercel.com'){
+                    if(element.target.nodeName.toLowerCase() == 'reach-portal'){
+                        let $modalInsetWrapper = document.querySelector('div[data-geist-modal-inset]');
+                        let $labelPB = $modalInsetWrapper.querySelectorAll('label p b');
+                        let $resourceName = $modalInsetWrapper.querySelector('input[name=resourceName]');
+                        let $verificationText = $modalInsetWrapper.querySelector('input[name=verificationText]');
+                        if($resourceName){
+                            $resourceName.value = $labelPB[0].innerText;
+                            that.dispatchInputEmit($resourceName, true);
+                            $verificationText.value = $labelPB[1].innerText;
+                            that.dispatchInputEmit($verificationText, true);
+                        }
+                    }
+                }
             }
         });
         // github
@@ -77,6 +92,13 @@ const app = {
         }
         // codeup.aliyun.com
         if(that.host === 'codeup.aliyun.com'){
+            mos.observe(document.querySelector('body'), {
+                childList: true,
+                subtree: true,
+            });
+        }
+        // vercel.com
+        if(that.host === 'vercel.com'){
             mos.observe(document.querySelector('body'), {
                 childList: true,
                 subtree: true,
