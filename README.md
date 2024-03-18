@@ -8,11 +8,18 @@
 - [x] Gitee
 - [x] codeup.aliyun.com
 - [x] vercel.com
+- [x] dash.cloudflare.com
 
 如需支持其它站点，可反馈，将酌情添加。
 ## 更新日志
+
+### v1.0.2
+- 增加支持```cloudflare.com```
+- bug修复
+
 ### v1.0.1
 - 增加支持```vercel.com```
+
 ### v1.0.0
 - 发布上线
 

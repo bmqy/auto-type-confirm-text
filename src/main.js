@@ -74,6 +74,18 @@ const app = {
                         }
                     }
                 }
+                // dash.cloudflare.com
+                if(that.host === 'dash.cloudflare.com'){
+                    if(element.target.nodeName.toLowerCase() == 'div' && element.target.querySelector('#focusFallback')){
+                        let $focusFallback = element.target.querySelector('#focusFallback');
+                        let $productionName = $focusFallback.querySelector('form>div>strong>span');
+                        let $deletionChallenge = $focusFallback.querySelector('input[id=deletionChallenge]');
+                        if($productionName){
+                            $deletionChallenge.value = $productionName.innerText;
+                            that.dispatchInputEmit($deletionChallenge, true);
+                        }
+                    }
+                }
             }
         });
         // github
@@ -99,6 +111,13 @@ const app = {
         }
         // vercel.com
         if(that.host === 'vercel.com'){
+            mos.observe(document.querySelector('body'), {
+                childList: true,
+                subtree: true,
+            });
+        }
+        // dash.cloudflare.com
+        if(that.host === 'dash.cloudflare.com'){
             mos.observe(document.querySelector('body'), {
                 childList: true,
                 subtree: true,
