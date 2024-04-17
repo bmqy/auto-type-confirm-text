@@ -1,6 +1,5 @@
 const app = {
     host: location.host,
-    pathname: location.pathname,
     init(){
         this.onMutationObserver();
     },
@@ -19,9 +18,6 @@ const app = {
 
     onMutationObserver(){
         let that = this;
-        setTimeout(function(){
-            that.pathname = location.pathname;
-        }, 200)
         let mos = new MutationObserver(function(mutations, observer) {
             for (let mutation in mutations) {
                 let element = mutations[mutation];
@@ -93,48 +89,38 @@ const app = {
         });
         // github
         if(that.host === 'github.com'){
-            if(that.pathname.indexOf('setttins')>-1){
-                mos.observe(document.querySelector('#repo-delete-menu-dialog'), {
-                    childList: true,
-                    subtree: true,
-                });
-            }
+            mos.observe(document.querySelector('#repo-delete-menu-dialog'), {
+                childList: true,
+                subtree: true,
+            });
         }
         // gitee
         if(that.host === 'gitee.com'){
-            if(that.pathname.indexOf('setttins')>-1){
-                mos.observe(document.querySelector('.ui.dimmer.modals.page'), {
-                    childList: true,
-                    subtree: true,
-                });
-            }
+            mos.observe(document.querySelector('.ui.dimmer.modals.page'), {
+                childList: true,
+                subtree: true,
+            });
         }
         // codeup.aliyun.com
         if(that.host === 'codeup.aliyun.com'){
-            if(that.pathname.indexOf('setttins')>-1){
-                mos.observe(document.querySelector('body'), {
-                    childList: true,
-                    subtree: true,
-                });
-            }
+            mos.observe(document.querySelector('body'), {
+                childList: true,
+                subtree: true,
+            });
         }
         // vercel.com
         if(that.host === 'vercel.com'){
-            if(that.pathname.indexOf('setttins')>-1){
-                mos.observe(document.querySelector('body'), {
-                    childList: true,
-                    subtree: true,
-                });
-            }
+            mos.observe(document.querySelector('body'), {
+                childList: true,
+                subtree: true,
+            });
         }
         // dash.cloudflare.com
         if(that.host === 'dash.cloudflare.com'){
-            if(that.pathname.indexOf('production/manage')>-1){
-                mos.observe(document.querySelector('body'), {
-                    childList: true,
-                    subtree: true,
-                });
-            }
+            mos.observe(document.querySelector('body'), {
+                childList: true,
+                subtree: true,
+            });
         }
     }
 }
