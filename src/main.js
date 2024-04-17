@@ -1,7 +1,10 @@
 const app = {
     host: location.host,
+    pathname: location.pathname,
+    observer: null,
     init(){
-        this.onMutationObserver();
+        this.initMutationObserver();
+        this.bindInterval();
     },
 
     dispatchInputEmit: function (element, isReact) {
@@ -16,9 +19,54 @@ const app = {
         element.dispatchEvent(event);
     },
 
-    onMutationObserver(){
+    bindInterval(){
         let that = this;
-        let mos = new MutationObserver(function(mutations, observer) {
+        setInterval(() => {
+            that.pathname = location.pathname;
+            // github
+            if(that.host === 'github.com'){
+                if(that.pathname.indexOf('settings') > -1){
+                    that.doObserve();
+                } else {
+                    that.doDisconnect();
+                }
+            } else if(that.host === 'gitee.com'){
+                // gitee
+                if(that.pathname.indexOf('settings') > -1){
+                    that.doObserve();
+                } else {
+                    that.doDisconnect();
+                }
+            } else if(that.host === 'codeup.aliyun.com'){
+                // codeup.aliyun.com
+                if(that.pathname.indexOf('settings') > -1){
+                    that.doObserve();
+                } else {
+                    that.doDisconnect();
+                }
+            } else if(that.host === 'vercel.com'){
+                // vercel.com
+                if(that.pathname.indexOf('settings') > -1){
+                    that.doObserve();
+                } else {
+                    that.doDisconnect();
+                }
+            } else if(that.host === 'dash.cloudflare.com'){
+                // dash.cloudflare.com
+                if(that.pathname.indexOf('production/manage') > -1){
+                    that.doObserve();
+                } else {
+                    that.doDisconnect();
+                }
+            } else {
+                that.doDisconnect();
+            }
+        }, 200);
+    },
+
+    initMutationObserver(){
+        let that = this;
+        that.observe = new MutationObserver(function(mutations, observer) {
             for (let mutation in mutations) {
                 let element = mutations[mutation];
                 // github
@@ -87,41 +135,49 @@ const app = {
                 }
             }
         });
+    },
+
+    doObserve(){
+        let that = this;
         // github
         if(that.host === 'github.com'){
-            mos.observe(document.querySelector('#repo-delete-menu-dialog'), {
+            that.observe.observe(document.querySelector('#repo-delete-menu-dialog'), {
                 childList: true,
                 subtree: true,
             });
         }
         // gitee
         if(that.host === 'gitee.com'){
-            mos.observe(document.querySelector('.ui.dimmer.modals.page'), {
+            that.observe.observe(document.querySelector('.ui.dimmer.modals.page'), {
                 childList: true,
                 subtree: true,
             });
         }
         // codeup.aliyun.com
         if(that.host === 'codeup.aliyun.com'){
-            mos.observe(document.querySelector('body'), {
+            that.observe.observe(document.querySelector('body'), {
                 childList: true,
                 subtree: true,
             });
         }
         // vercel.com
         if(that.host === 'vercel.com'){
-            mos.observe(document.querySelector('body'), {
+            that.observe.observe(document.querySelector('body'), {
                 childList: true,
                 subtree: true,
             });
         }
         // dash.cloudflare.com
         if(that.host === 'dash.cloudflare.com'){
-            mos.observe(document.querySelector('body'), {
+            that.observe.observe(document.querySelector('body'), {
                 childList: true,
                 subtree: true,
             });
         }
+    },
+
+    doDisconnect(){
+        this.observer && this.observer.disconnect();
     }
 }
 
