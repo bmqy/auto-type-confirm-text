@@ -35,6 +35,7 @@
     onMutationObserver() {
       let that = this;
       let mos = new MutationObserver(function(mutations, observer) {
+        that.pathname = location.pathname;
         for (let mutation in mutations) {
           let element = mutations[mutation];
           if (that.host === "github.com") {
