@@ -34,8 +34,10 @@
     },
     onMutationObserver() {
       let that = this;
-      let mos = new MutationObserver(function(mutations, observer) {
+      setTimeout(function() {
         that.pathname = location.pathname;
+      }, 200);
+      let mos = new MutationObserver(function(mutations, observer) {
         for (let mutation in mutations) {
           let element = mutations[mutation];
           if (that.host === "github.com") {
