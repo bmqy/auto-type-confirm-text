@@ -3,8 +3,7 @@ const app = {
     pathname: location.pathname,
     observer: null,
     init(){
-        this.initMutationObserver();
-        this.bindInterval();
+        this.onMutationObserver();
     },
 
     dispatchInputEmit: function (element, isReact) {
@@ -19,56 +18,12 @@ const app = {
         element.dispatchEvent(event);
     },
 
-    bindInterval(){
+    onMutationObserver(){
         let that = this;
-        setInterval(() => {
-            that.pathname = location.pathname;
-            // github
-            if(that.host === 'github.com'){
-                if(that.pathname.indexOf('settings') > -1){
-                    that.doObserve();
-                } else {
-                    that.doDisconnect();
-                }
-            } else if(that.host === 'gitee.com'){
-                // gitee
-                if(that.pathname.indexOf('settings') > -1){
-                    that.doObserve();
-                } else {
-                    that.doDisconnect();
-                }
-            } else if(that.host === 'codeup.aliyun.com'){
-                // codeup.aliyun.com
-                if(that.pathname.indexOf('settings') > -1){
-                    that.doObserve();
-                } else {
-                    that.doDisconnect();
-                }
-            } else if(that.host === 'vercel.com'){
-                // vercel.com
-                if(that.pathname.indexOf('settings') > -1){
-                    that.doObserve();
-                } else {
-                    that.doDisconnect();
-                }
-            } else if(that.host === 'dash.cloudflare.com'){
-                // dash.cloudflare.com
-                if(that.pathname.indexOf('production/manage') > -1){
-                    that.doObserve();
-                } else {
-                    that.doDisconnect();
-                }
-            } else {
-                that.doDisconnect();
-            }
-        }, 200);
-    },
-
-    initMutationObserver(){
-        let that = this;
-        that.observe = new MutationObserver(function(mutations, observer) {
+        let observe = new MutationObserver(function(mutations, observer) {
             for (let mutation in mutations) {
                 let element = mutations[mutation];
+                that.pathname = location.pathname;
                 // github
                 if(that.host === 'github.com'){
                     if(element.target.id === 'repo-delete-warning-container'){
@@ -133,51 +88,41 @@ const app = {
                         }
                     }
                 }
+                // 1panel
+                if(that.pathname === '/websites'){
+                    if(element.target.querySelector('.el-dialog')){
+                        if(element.target.querySelector('.el-dialog__title').innerText.indexOf('删除') > -1){
+                            let $dialog = element.target.querySelector('.el-dialog');
+                            let $input = $dialog.querySelector('.el-input__inner[type=text]');
+                            if($input){
+                                $input.value = $input.getAttribute('placeholder');
+                                that.dispatchInputEmit($input, true);
+                            }
+                        }
+                    }
+                }
+                // bt: 8.0.53
+                if(that.pathname === '/site_ifame'){
+                    if(element.target.querySelector('.delete_site_layer')){
+                        if(element.target.querySelector('.layui-layer-title').innerText.indexOf('删除') > -1){
+                            let $deleteSiteLayer = element.target.querySelector('.delete_site_layer');
+                            let $vcodeText = $deleteSiteLayer.querySelector('.vcode>span.text');
+                            let $vcodeResult = $deleteSiteLayer.querySelector('#vcodeResult');
+                            if($vcodeResult){
+                                let $textArr = $vcodeText.innerText.split(' + ');
+                                $vcodeResult.value = parseInt($textArr[0]) + parseInt($textArr[1]);
+                            }
+                        }
+                    }
+                }
             }
         });
-    },
 
-    doObserve(){
-        let that = this;
-        // github
-        if(that.host === 'github.com'){
-            that.observe.observe(document.querySelector('#repo-delete-menu-dialog'), {
-                childList: true,
-                subtree: true,
-            });
-        }
-        // gitee
-        if(that.host === 'gitee.com'){
-            that.observe.observe(document.querySelector('.ui.dimmer.modals.page'), {
-                childList: true,
-                subtree: true,
-            });
-        }
-        // codeup.aliyun.com
-        if(that.host === 'codeup.aliyun.com'){
-            that.observe.observe(document.querySelector('body'), {
-                childList: true,
-                subtree: true,
-            });
-        }
-        // vercel.com
-        if(that.host === 'vercel.com'){
-            that.observe.observe(document.querySelector('body'), {
-                childList: true,
-                subtree: true,
-            });
-        }
-        // dash.cloudflare.com
-        if(that.host === 'dash.cloudflare.com'){
-            that.observe.observe(document.querySelector('body'), {
-                childList: true,
-                subtree: true,
-            });
-        }
-    },
-
-    doDisconnect(){
-        this.observer && this.observer.disconnect();
+        observe.observe(document.querySelector('body'), {
+            childList: true,
+            subtree: true,
+            attributes: true,
+        });
     }
 }
 
