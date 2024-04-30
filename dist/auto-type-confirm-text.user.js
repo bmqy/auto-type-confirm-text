@@ -1,15 +1,11 @@
 // ==UserScript==
 // @name         自动输入二次确认文本
 // @namespace    npm/vite-plugin-monkey
-// @version      1.0.4
-// @author       monkey
+// @version      1.0.5
+// @author       bmqy
 // @description  自动输入需要二次确认的文本
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAcJJREFUeF7tWttxwjAQXDohnZBOoBJCJaSTpBPoBHIZG2SPjM6nEyNbqx8zg3QjrXfvYd0GjY9N4+cHASADGkeAEmicAHSClEDFEtgBOAKQ55zxC+D0t06eyVEzAy4AtskTxCfI4T81a9cKwBXAx9IB2HcSmMuC1Uhg6gXeRn9ksThrsYZiBeYQADJgiEAWi7MWF6C3xmQxCUjCcc6IvZrNa+dIGOu9ufwORwoAiRqSQEkUiQ2xd+gTpZABP4asS3sg67yvLqubA4C8xKnD93YeeUIIwBhZ66Y915UCQPb4f/aaAfjuqDoGVCMBYUGqhkgCUKuDTAEwK4F6xQAC4ClmR1tkgDETjAJHCQRoWqnlyG6VKes+yYCYdCgBSuCJgFVbKuE6TrLukz6APmCIAGuBVDXIWsDRcXmaohNkLRBxZgqKMQwyDDIMDhBgHsA8oOLP4iVvhnodJCWgiCzFp7z1YqSlq7FHD1GY71u7skrRQG6GpNvrbZejpQ7ibddaC0T3UWvF9wo0AmAshsiAGAKUgLeHcrRnjUqraZRkr3BGwxZ7hdfQLu/oTqZNLTEKuAJDAFzhXKAxMmCBL811y80z4A7Z+otB27V0OwAAAABJRU5ErkJggg==
-// @match        https://github.com/*
-// @match        https://gitee.com/*
-// @match        https://codeup.aliyun.com/*
-// @match        https://vercel.com/*
-// @match        https://dash.cloudflare.com/*
+// @match        *://*/*
 // ==/UserScript==
 
 (function () {
@@ -20,8 +16,7 @@
     pathname: location.pathname,
     observer: null,
     init() {
-      this.initMutationObserver();
-      this.bindInterval();
+      this.onMutationObserver();
     },
     dispatchInputEmit: function(element, isReact) {
       let event = new Event("input", { bubbles: true });
@@ -34,50 +29,12 @@
       }
       element.dispatchEvent(event);
     },
-    bindInterval() {
+    onMutationObserver() {
       let that = this;
-      setInterval(() => {
-        that.pathname = location.pathname;
-        if (that.host === "github.com") {
-          if (that.pathname.indexOf("settings") > -1) {
-            that.doObserve();
-          } else {
-            that.doDisconnect();
-          }
-        } else if (that.host === "gitee.com") {
-          if (that.pathname.indexOf("settings") > -1) {
-            that.doObserve();
-          } else {
-            that.doDisconnect();
-          }
-        } else if (that.host === "codeup.aliyun.com") {
-          if (that.pathname.indexOf("settings") > -1) {
-            that.doObserve();
-          } else {
-            that.doDisconnect();
-          }
-        } else if (that.host === "vercel.com") {
-          if (that.pathname.indexOf("settings") > -1) {
-            that.doObserve();
-          } else {
-            that.doDisconnect();
-          }
-        } else if (that.host === "dash.cloudflare.com") {
-          if (that.pathname.indexOf("production/manage") > -1) {
-            that.doObserve();
-          } else {
-            that.doDisconnect();
-          }
-        } else {
-          that.doDisconnect();
-        }
-      }, 200);
-    },
-    initMutationObserver() {
-      let that = this;
-      that.observe = new MutationObserver(function(mutations, observer) {
+      let observe = new MutationObserver(function(mutations, observer) {
         for (let mutation in mutations) {
           let element = mutations[mutation];
+          that.pathname = location.pathname;
           if (that.host === "github.com") {
             if (element.target.id === "repo-delete-warning-container") {
               let $verificationField = document.querySelector("#verification_field");
@@ -137,44 +94,38 @@
               }
             }
           }
+          if (that.pathname === "/websites") {
+            if (element.target.querySelector(".el-dialog")) {
+              if (element.target.querySelector(".el-dialog__title").innerText.indexOf("删除") > -1) {
+                let $dialog = element.target.querySelector(".el-dialog");
+                let $input = $dialog.querySelector(".el-input__inner[type=text]");
+                if ($input) {
+                  $input.value = $input.getAttribute("placeholder");
+                  that.dispatchInputEmit($input, true);
+                }
+              }
+            }
+          }
+          if (that.pathname === "/site_ifame") {
+            if (element.target.querySelector(".delete_site_layer")) {
+              if (element.target.querySelector(".layui-layer-title").innerText.indexOf("删除") > -1) {
+                let $deleteSiteLayer = element.target.querySelector(".delete_site_layer");
+                let $vcodeText = $deleteSiteLayer.querySelector(".vcode>span.text");
+                let $vcodeResult = $deleteSiteLayer.querySelector("#vcodeResult");
+                if ($vcodeResult) {
+                  let $textArr = $vcodeText.innerText.split(" + ");
+                  $vcodeResult.value = parseInt($textArr[0]) + parseInt($textArr[1]);
+                }
+              }
+            }
+          }
         }
       });
-    },
-    doObserve() {
-      let that = this;
-      if (that.host === "github.com") {
-        that.observe.observe(document.querySelector("#repo-delete-menu-dialog"), {
-          childList: true,
-          subtree: true
-        });
-      }
-      if (that.host === "gitee.com") {
-        that.observe.observe(document.querySelector(".ui.dimmer.modals.page"), {
-          childList: true,
-          subtree: true
-        });
-      }
-      if (that.host === "codeup.aliyun.com") {
-        that.observe.observe(document.querySelector("body"), {
-          childList: true,
-          subtree: true
-        });
-      }
-      if (that.host === "vercel.com") {
-        that.observe.observe(document.querySelector("body"), {
-          childList: true,
-          subtree: true
-        });
-      }
-      if (that.host === "dash.cloudflare.com") {
-        that.observe.observe(document.querySelector("body"), {
-          childList: true,
-          subtree: true
-        });
-      }
-    },
-    doDisconnect() {
-      this.observer && this.observer.disconnect();
+      observe.observe(document.querySelector("body"), {
+        childList: true,
+        subtree: true,
+        attributes: true
+      });
     }
   };
   app.init();
