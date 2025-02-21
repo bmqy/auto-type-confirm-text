@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         自动输入二次确认文本
 // @namespace    npm/vite-plugin-monkey
-// @version      1.0.5
+// @version      1.0.6
 // @author       bmqy
 // @description  自动输入需要二次确认的文本
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAcJJREFUeF7tWttxwjAQXDohnZBOoBJCJaSTpBPoBHIZG2SPjM6nEyNbqx8zg3QjrXfvYd0GjY9N4+cHASADGkeAEmicAHSClEDFEtgBOAKQ55zxC+D0t06eyVEzAy4AtskTxCfI4T81a9cKwBXAx9IB2HcSmMuC1Uhg6gXeRn9ksThrsYZiBeYQADJgiEAWi7MWF6C3xmQxCUjCcc6IvZrNa+dIGOu9ufwORwoAiRqSQEkUiQ2xd+gTpZABP4asS3sg67yvLqubA4C8xKnD93YeeUIIwBhZ66Y915UCQPb4f/aaAfjuqDoGVCMBYUGqhkgCUKuDTAEwK4F6xQAC4ClmR1tkgDETjAJHCQRoWqnlyG6VKes+yYCYdCgBSuCJgFVbKuE6TrLukz6APmCIAGuBVDXIWsDRcXmaohNkLRBxZgqKMQwyDDIMDhBgHsA8oOLP4iVvhnodJCWgiCzFp7z1YqSlq7FHD1GY71u7skrRQG6GpNvrbZejpQ7ibddaC0T3UWvF9wo0AmAshsiAGAKUgLeHcrRnjUqraZRkr3BGwxZ7hdfQLu/oTqZNLTEKuAJDAFzhXKAxMmCBL811y80z4A7Z+otB27V0OwAAAABJRU5ErkJggg==
@@ -91,6 +91,16 @@
               if ($productionName) {
                 $deletionChallenge.value = $productionName.innerText;
                 that.dispatchInputEmit($deletionChallenge, true);
+              }
+            }
+          }
+          if (that.host === "www.jianguoyun.com") {
+            if (element.target.nodeName.toLowerCase() == "div" && element.target.querySelector(".ivu-modal")) {
+              let $ivuModal = element.target.querySelector(".ivu-modal");
+              let $deleteInput = $ivuModal.querySelector("input[placeholder=DELETE]");
+              if ($deleteInput) {
+                $deleteInput.value = "DELETE";
+                that.dispatchInputEmit($deleteInput, true);
               }
             }
           }
