@@ -88,6 +88,17 @@ const app = {
                         }
                     }
                 }
+                // www.jianguoyun.com
+                if(that.host === 'www.jianguoyun.com'){
+                    if(element.target.nodeName.toLowerCase() == 'div' && element.target.querySelector('.ivu-modal')){
+                        let $ivuModal = element.target.querySelector('.ivu-modal');
+                        let $deleteInput = $ivuModal.querySelector('input[placeholder=DELETE]');
+                        if($deleteInput){
+                            $deleteInput.value = 'DELETE';
+                            that.dispatchInputEmit($deleteInput, true);
+                        }
+                    }
+                }
                 // 1panel
                 if(that.pathname === '/websites'){
                     if(element.target.querySelector('.el-dialog')){
