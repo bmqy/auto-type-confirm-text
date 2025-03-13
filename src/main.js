@@ -99,6 +99,17 @@ const app = {
                         }
                     }
                 }
+                // www.cursor.com
+                if(that.host === 'www.cursor.com'){
+                    if(element.target.nodeName.toLowerCase() == 'div' && element.target.querySelector('.fixed>.relative.w-\\[500px\\]')){
+                        let $deleteModal = element.target.querySelector('.fixed>.relative.w-\\[500px\\]');
+                        let $deleteInput = $deleteModal.querySelector("input[placeholder='Type \\'Delete\\' to confirm']");
+                        if($deleteInput){
+                            $deleteInput.value = 'Delete';
+                            that.dispatchInputEmit($deleteInput, true);
+                        }
+                    }
+                }
                 // 1panel
                 if(that.pathname === '/websites'){
                     if(element.target.querySelector('.el-dialog')){

@@ -10,11 +10,15 @@
 - [x] vercel.com
 - [x] dash.cloudflare.com
 - [x] www.jianguoyun.com
+- [x] www.cursor.com
 - [x] 1panel
 - [x] 宝塔，（保证```8.0.53```版支持，其它不确定）
 
 如需支持其它站点，可反馈，将酌情添加。
 ## 更新日志
+
+### v1.0.8
+- 支持`www.cursor.com`；
 
 ### v1.0.7
 - 修复`cloudflare`失效问题；
