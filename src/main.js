@@ -111,13 +111,24 @@ const app = {
                     }
                 }
                 // 1panel
-                if(that.pathname === '/websites'){
+                if(['/websites','/apps/installed','/databases/mysql'].includes(that.pathname)){
                     if(element.target.querySelector('.el-dialog')){
                         if(element.target.querySelector('.el-dialog__title').innerText.indexOf('删除') > -1){
                             let $dialog = element.target.querySelector('.el-dialog');
                             let $input = $dialog.querySelector('.el-input__inner[type=text]');
                             if($input){
                                 $input.value = $input.getAttribute('placeholder');
+                                that.dispatchInputEmit($input, true);
+                            }
+                        }
+                    }
+                } else if(['/containers/setting'].includes(that.pathname)){
+                    if(element.target.querySelector('.el-dialog')){
+                        if(element.target.querySelector('.card-header').innerText.indexOf('配置修改') > -1){
+                            let $dialog = element.target.querySelector('.el-dialog');
+                            let $input = $dialog.querySelector('.el-input__inner[type=text]');
+                            if($input){
+                                $input.value = '立即重启';
                                 that.dispatchInputEmit($input, true);
                             }
                         }
