@@ -63,7 +63,7 @@ const app = {
         }
         // vercel.com
         if (that.host === 'vercel.com') {
-          if (element.target.nodeName.toLowerCase() == 'reach-portal') {
+          if (element.target.nodeName.toLowerCase() == 'div' && element.target.querySelector('div[role="dialog"]')) {
             let $modalInsetWrapper = document.querySelector('div[data-geist-modal-inset]')
             let $labelPB = $modalInsetWrapper.querySelectorAll('label p b')
             let $resourceName = $modalInsetWrapper.querySelector('input[name=resourceName]')
