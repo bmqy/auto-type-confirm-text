@@ -154,6 +154,7 @@ const app = {
               let $input = element.target.querySelector('.el-input__inner')
               if ($input) {
                 $input.value = $deleteFileTextDanger.innerText.replace(/["]+/g, '').trim()
+                that.dispatchInputEmit($input, true)
               }
             }
           }
@@ -164,6 +165,7 @@ const app = {
               if ($vcodeResult) {
                 let $textArr = $vcodeText.innerText.split(' + ')
                 $vcodeResult.value = parseInt($textArr[0]) + parseInt($textArr[1])
+                that.dispatchInputEmit($vcodeResult, true)
               }
             }
         }
