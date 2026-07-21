@@ -149,7 +149,6 @@ const app = {
           }
         } else if (that.pathname === '/files') {
           if (element.target.querySelector('.confirm-input')) {
-            console.log("🚀 ~ element.target:", element.target)
             if (element.target.querySelector('p').innerText.indexOf('请手动输入') > -1) {
               let $deleteFileTextDanger = element.target.querySelector('.text-danger')
               let $input = element.target.querySelector('.el-input__inner')
