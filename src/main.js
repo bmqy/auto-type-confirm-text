@@ -157,6 +157,15 @@ const app = {
               }
             }
           }
+        } else if (that.pathname === '/docker/images') {
+          if (element.target.querySelector('.confirm-calc')) {
+              let $vcodeText = element.target.querySelector('.vcode>span+span')
+              let $vcodeResult = element.target.querySelector('.vcode .el-input__inner')
+              if ($vcodeResult) {
+                let $textArr = $vcodeText.innerText.split(' + ')
+                $vcodeResult.value = parseInt($textArr[0]) + parseInt($textArr[1])
+              }
+            }
         }
       }
     })
