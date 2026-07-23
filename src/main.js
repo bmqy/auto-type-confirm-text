@@ -87,6 +87,17 @@ const app = {
               that.dispatchInputEmit($deletionChallenge, true)
             }
           }
+          // 清空存储桶
+          if (element.target.nodeName.toLowerCase() == 'div' && element.target.querySelector('[data-base-ui-focusable]')) {
+            let $focusable = element.target.querySelector('[data-base-ui-focusable]')
+            let $productionName = $focusable.querySelector('span>p>strong')
+            let $deletionChallenge = $focusable.querySelector('input')
+
+            if ($productionName) {
+              $deletionChallenge.value = $productionName.innerText
+              that.dispatchInputEmit($deletionChallenge, true)
+            }
+          }
         }
         // www.jianguoyun.com
         if (that.host === 'www.jianguoyun.com') {
